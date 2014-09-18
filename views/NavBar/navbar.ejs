@@ -1,0 +1,31 @@
+<div class='sidebar-width'>
+	<div class="grid fluid">
+		<nav class="sidebar light">
+			<ul>
+			
+
+				<li><a href="/WorkArea"><i class="icon-home"></i>Work Area</a></li>
+
+				<li><a href="#" onclick="createEditorPanel('')"><i class="icon-pencil"></i>Cypher Editor</a></li>
+
+				<li><a href="#" onclick="createSaveQueryPanel('')"><i class="icon-cog"></i>New Saved Query</a></li>
+
+				<li><a class="dropdown-toggle saved-queries" href="#"><div class="color-toggle"><i class="icon-tag"></i></div>Saved Queries</a>
+
+				<ul class="dropdown-menu saved-queries-dropdown" data-role="dropdown">
+				<% _.each(res.locals.cypherqueries, function(cypherquery) { %>
+						<li onclick="createEditorPanel('<%=cypherquery.cypherquery%>')"><a href="#"><%= cypherquery.name %></a></li>
+				<% }) %>
+				</ul>
+				
+				</li>
+
+				<li><a href="/DataIntegration"><i class="icon-arrow-right"></i>Data Integration</a></li>	
+				<li><a href="/Settings"><i class="icon-arrow-right"></i>Settings</a></li>
+
+
+			</ul>
+		</nav>
+	</div>
+
+</div>

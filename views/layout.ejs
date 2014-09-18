@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>New Sails App</title>
+
+    <!-- Viewport mobile tag for sensible mobile support -->
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    
+
+
+    <!--STYLES-->
+    <link rel="stylesheet" href="/styles/jquery-ui.min.css">
+    <link rel="stylesheet" href="/styles/iconFont.css">
+    <link rel="stylesheet" href="/styles/bootstrap.css">
+    <link rel="stylesheet" href="/styles/metro-bootstrap.css">
+    <link rel="stylesheet" href="/styles/codemirror.css">
+    <link rel="stylesheet" href="/styles/codemirror-neo.css">
+    <link rel="stylesheet" href="/styles/alchemy.css">
+    <link rel="stylesheet" href="/styles/vendor.css">
+    <link rel="stylesheet" href="/styles/custom.css">
+    <!--STYLES END-->
+  </head>
+
+  <body class="metro">
+   
+    <div class="row">
+        <div class="col-xs-3">
+            <div class="go-left"><h2>SaxoAML v1.0</h2></div>
+            <%- include /NavBar/navbar.ejs %>
+        </div>
+        <div class="col-xs-9">
+            <%- body %>
+        </div>
+    </div>
+
+
+
+    <!--
+        Client-side Templates
+        ========================
+
+        HTML templates are important prerequisites of modern, rich client applications.
+        To work their magic, frameworks like Backbone, Angular, Ember, and Knockout require
+        that you load these templates client-side.
+
+        By default, your Gruntfile is configured to automatically load and precompile
+        client-side JST templates in your `assets/templates` folder, then
+        include them here automatically (between TEMPLATES and TEMPLATES END).
+        
+        To customize this behavior to fit your needs, just edit `tasks/pipeline.js`.
+        For example, here are a few things you could do:
+
+            + Import templates from other directories
+            + Use a different template engine (handlebars, jade, dust, etc.)
+            + Internationalize your client-side templates using a server-side
+              stringfile before they're served.
+    -->
+
+    <!--TEMPLATES-->
+    
+    <!--TEMPLATES END-->
+
+
+    <!--SCRIPTS-->
+    <script src="/js/socket.io.js"></script>
+    <script src="/js/sails.io.js"></script>
+    <script src="/js/app.js"></script>
+    <script src="/js/vendor.js"></script>
+    <script src="/js/neo.js"></script>
+    <script src="/js/jquery-2.1.1.min.js"></script>
+    <script src="/js/jquery.widget.min.js"></script>
+    <script src="/js/jquery-ui.min.js"></script>
+    <script src="/js/jquery-functions.js"></script>
+    <script src="/js/ui-utils.js"></script>
+    <script src="/js/ui-panels.js"></script>
+    <script src="/js/bootstrap.js"></script>
+    <script src="/js/ejs_production.js"></script>
+    <script src="/js/codemirror.js"></script>
+    <script src="/js/codemirror-cypher.js"></script>
+    <script src="/js/alchemy.js"></script>
+    <script src="/js/alchemyConfig.js"></script>
+    <script src="/js/metro.min.js"></script>
+    <!--SCRIPTS END-->
+
+    <%- blocks.scripts %>
+    
+  </body>
+</html>

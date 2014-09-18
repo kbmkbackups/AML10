@@ -1,0 +1,20 @@
+<div class="inputform">
+
+<form action="/CypherQuery/create" method="POST" id="sign-up-form" class="form-signin">
+	<h1 class="form-signin-heading">Create new cypherquery</h1>
+	
+	<div class="control-group">
+	<input type="text" class="form-control" placeholder="query name" name="name" id="name">
+	</div>
+
+	<div class="control-group">
+	<input type="text" class="form-control" placeholder="query text" name="cypherquery" id="cypherquery">
+	</div>
+
+	<br>
+	<input type="submit" class="btn btn-lg btn-primary btn-block" value="Create Query"/>
+	<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+	
+</form>
+
+</div>

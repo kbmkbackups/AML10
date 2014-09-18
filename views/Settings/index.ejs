@@ -1,0 +1,53 @@
+<div class="go-left"><h2>Settings</h2>
+
+<br>
+
+<form action="/Settings/save" method="POST">
+
+	<table class="settingstable"><tr><td>
+
+
+	neo4j server:<td><input class="settings-tb" type="text" id="neo_server" name="neo_server" value="<%= settings.neoserver %>">
+	<tr><td>
+
+	sql server instance:<td><input class="settings-tb" type="text" id="sql_instance" name="sql_instance" value="<%= settings.sqlinstance %>">
+	<tr><td>
+
+	sql server db:<td><input class="settings-tb" type="text" id="sql_db" name="sql_db" value="<%= settings.sqldb %>">
+	<tr><td>
+
+	sql server account:<td><input class="settings-tb" type="text" id="sql_account" name="sql_account" value="<%= settings.sqlaccount %>">
+	<tr><td>
+
+	sql server pass:<td><input class="settings-tb" type="text" id="sql_password" name="sql_pass" value="<%= settings.sqlpass %>">
+	<tr><td>
+
+	mongodb server:<td><input class="settings-tb" type="text" id="mongodb_server" name="mongodb_server" value="<%= settings.mongoserver %>">
+	<tr><td>
+
+	mongodb database:<td><input class="settings-tb" type="text" id="mongodb_db" name="mongodb_db" value="<%= settings.mongodb %>">
+	<tr><td>
+
+	csv folder:<td><input class="settings-tb" type="text" id="csv_folder" name="csv_folder" value="<%= settings.csvfolder %>">
+	<tr><td>
+
+	csv separator:<td><input class="settings-tb" type="text" id="csv_sep" name="csv_sep" value="<%= settings.csvsep %>">
+	<tr><td>
+
+	csv qualifier:<td><input class="settings-tb" type="text" id="csv_qualifer" name="csv_qualifier" value="<%= settings.csvqualifier %>">
+	<tr><td>
+
+	Powershell Folder:<td><input class="settings-tb" type="text" id="ps_folder" name="ps_folder" value="<%= settings.psfolder %>">
+	</table>
+
+	<br>
+
+	<input type="submit" class="danger" value="Save"/>
+	<input type="button" class="danger" value="Create" onclick="location.href='Settings/create'"/>
+
+	<input type="hidden" name="_csrf" value="<%= _csrf %>" />
+
+	
+</form>
+</div>
+

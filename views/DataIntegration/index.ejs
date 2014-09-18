@@ -1,0 +1,135 @@
+<div class="go-left"><h2>Data Integration</h2></div>
+
+<div class="bs-example">
+    <div class="panel-group" id="accordion">
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">neo4j metadata</a>
+                </h4>
+            </div>
+
+            <div id="collapseOne" class="panel-collapse collapse">
+                <div class="panel-body">
+
+						<div class="container-non-responsive">
+							<div class="row">
+
+
+							  	<div class="col-xs-3 pull-left">
+							  		<h4>Labels</h4>
+							  		<div class="list-container2">
+											<div class="list-group label-t">
+
+											</div>
+									</div>
+								</div>
+
+							  	<div class="col-xs-3">
+							  		<h4>Relationships</h4>
+							  		<div class="list-container2">
+										<div class="list-group relationship-t">
+
+										</div>
+									</div>
+								</div>
+
+							  	<div class="col-xs-3">
+							  		<div class="list-container2">
+							  			<h4>Propertykeys</h4>
+										<div class="list-group propertykey-t">
+
+										</div>
+									</div>
+							  	</div>
+
+							
+							</div>
+						</div>
+
+                </div>
+            </div>
+
+        </div>
+
+
+
+        <div class="panel panel-default">
+
+            <div class="panel-heading">
+                <h4 class="panel-title">
+                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">mssql metadata</a>
+                </h4>
+            </div>
+            <div class="container-fluid">
+
+            <div id="collapseTwo" class="panel-collapse collapse in">
+                <div class="panel-body">
+
+                	<div class='status'></div>
+                	
+                	<div class="row">
+					    <div class="col-xs-2">
+					    	<button type="button" class="primary metanavbut create-node-but" data-toggle="dropdown">Create Nodes</button>
+					    </div>
+					   	<div class="col-xs-2">
+					    	<button type="button" class="primary metanavbut create-rel-but" data-toggle="dropdown">Create Relationships</button>
+					    </div>
+					    <div class="col-xs-2">
+					    	<button type="button" class="primary metanavbut create-prop-but" data-toggle="dropdown">Create Properties</button>
+					    </div>
+
+					</div>
+
+                    <div class="row">
+
+					    <div class="col-xs-5">
+					    	<h4>Tables</h4>
+							<div class="list-container">
+
+								<div class="list-group">
+
+									<% _.each(tablelistitem, function(dc){ %>
+										<a class="list-group-item tablelistitem" href="#" name="<%= dc.name %>" id="<%= dc.object_id %>"><%= dc.name %></a>
+
+									<% }); %>	
+
+								</div>
+
+							</div>
+						</div>
+						
+						<div class="col-xs-4">	
+							<h4>Columns</h4>
+							<div class="list-container ajax-list">
+
+							</div>
+
+							<div class="addcolsdiv">
+								Label: <input type="text" id="newnodeslabel"><br>
+								Table: <input type="text" id="newnodessourcetable"><br>
+								
+								<table class="addcolstable table" border=1><tr><td>SQL Field</td><td>Node Property</td></tr>
+
+								</table>
+							</div>
+
+						</div>
+
+					</div>
+
+                </div> <!-- Panel Body -->
+            </div>
+
+            </div>
+
+
+        </div>  <!-- Panel -->
+
+    </div>
+</div>
+
+
+<% script('js/dataintegration.js') -%>
