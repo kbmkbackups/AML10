@@ -73,12 +73,15 @@
                 	<div class="row">
 					    <div class="col-xs-2">
 					    	<button type="button" class="primary metanavbut create-node-but" data-toggle="dropdown">Create Nodes</button>
+					    	<button type="button" class="primary metanavbut process-file-but" data-toggle="dropdown">Run Import</button>
 					    </div>
 					   	<div class="col-xs-2">
 					    	<button type="button" class="primary metanavbut create-rel-but" data-toggle="dropdown">Create Relationships</button>
 					    </div>
 					    <div class="col-xs-2">
 					    	<button type="button" class="primary metanavbut create-prop-but" data-toggle="dropdown">Create Properties</button>
+					    	<button type="button" class="success metanavbut create-map-but" data-toggle="dropdown">Create Map</button>
+					    	<input type="text" id="fieldmapid" disabled>
 					    </div>
 
 					</div>
@@ -111,7 +114,7 @@
 								Label: <input type="text" id="newnodeslabel"><br>
 								Table: <input type="text" id="newnodessourcetable"><br>
 								
-								<table class="addcolstable table" border=1><tr><td>SQL Field</td><td>Node Property</td></tr>
+								<table class="addcolstable table" border=1><tr><td>SQL Field</td><td>Node Property</td><td>Convert</td></tr>
 
 								</table>
 							</div>

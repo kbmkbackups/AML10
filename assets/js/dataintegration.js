@@ -1,193 +1,226 @@
 $(document).ready(function(){
 
-	getSettings(function(settings){
+	socket.get('/NeoProxy/getneometa', { type: 'relationships' }, function(r){
+		_.each(r, function(rr){
+  			$('.relationship-t').append("<a class='list-group-item'>" + rr.key + "</a>");	
+  		});
+	});
 
-		var label_url = 'db/data/labels';
-		var rel_url = 'db/data/relationship/types';
-		var pk_url = 'db/data/propertykeys';
+	socket.get('/NeoProxy/getneometa', { type: 'labels' }, function(r){
+		_.each(r, function(rr){
+  			$('.label-t').append("<a class='list-group-item'>" + rr.key + "</a>");	
+  		});
+	});
 
-		var server = settings.neoserver;
+	socket.get('/NeoProxy/getneometa', { type: 'propertykeys' }, function(r){
+		_.each(r, function(rr){
+  			$('.propertykey-t').append("<a class='list-group-item'>" + rr.key + "</a>");	
+  		});
+	});
 
-		getNeoMeta = function(url, tag, tableclass){
 
-		    $.ajax({
-			      url: server + url,
-			      data: {},
-			      success: function(r){ 
-			      		_.each(r, function(rr){
-			      			$(tableclass).append("<a class='list-group-item'>" + rr + "</a>");	
-			      		});
-			      },
-			      dataType: 'json'
+	tablerow_f = function(name, name2, id2){
+		var tablerow = "<tr class='addcolstable-field' name='" + name + "' name2='" + name2 + "' id='tr_" + id2 + "'><td name='" + name + "' name2='" + name2 + "'>" 
+		                    + name2 + "</td><td><input type='text' id='tb_" + id2 + "'></td><td><input type='checkbox' id='convcb_" + name + "'></td></tr>";
+		return tablerow;
+	}
+
+	columnsrow_f = function(column_id, namefull, nameshort){
+			var crdiv = "<div class='list-group-item'><input class='csel-cb' type='checkbox' id='cb_" + column_id + "'  id2='" + column_id + "' name='" + nameshort + "' name2='" + namefull + "'>"
+                          + "&nbsp;<a class='csel-a' href='#' name='" + nameshort + "' + name2='" + namefull + "' id2='" + column_id + "'>" + namefull	+ "</a></div>";	
+        return crdiv;
+	}
+
+	createSQL = function(cb){
+
+		var tablename = $('#newnodessourcetable').val();
+		var sql = "select top(100) ";
+
+		$('.addcolstable .addcolstable-field').each(function(index, element){
+			sql = sql  + $(element).attr("name") + "," ; 
+		});
+
+		sql = sql.substring(0,sql.length-1) + " from " + tablename;
+
+		cb(sql);
+
+	}
+
+
+	createPowershellScript = function(){
+
+		createSQL(function(sql){
+
+			var tablename = $('#newnodessourcetable').val() + '.csv';
+			var psfilename = $('#newnodessourcetable').val() + '.ps1';
+
+			var ps_engine_obj = {
+				tablename: tablename,	
+				psfilename: psfilename,
+				sql: sql
+			}
+
+			$.ajax({
+		      url: 'DataIntegration/savepowershellfile2',
+		      data: ps_engine_obj,
+		      statusCode: {
+			    200: function(e,d) {
+			    	console.log('...........................');
+			    }
+			  },
+
+		      dataType: 'json'
 			});
 
-		}
+		
+		});	
 
-		getNeoMeta(label_url, 'label', '.label-t');
-		getNeoMeta(rel_url, 'relationship', '.relationship-t');
-		getNeoMeta(pk_url, 'propertykey', '.propertykey-t');
+	}
 
+	processcsvfile = function(){
 
-		$('.tablelistitem').click(function(){
+		var pfile = $('#newnodessourcetable').val() + '.csv';
+		var mapid = $('#fieldmapid').val();
 
-			var tableid = $(this).attr("id");
-			var tablename = $(this).attr("name");
+		$.ajax({
+		      url: 'DataIntegration/processcsvfile',
+		      data: {
+		      	psfilename: pfile,
+		      	mapid: mapid
+		      },
+		      statusCode: {
+			    200: function() {
+			    	console.log('back from csv processing');	
 
-			$('#newnodessourcetable').val(tablename);
-
-		    $.ajax({
-			      url: '/DataIntegration/tablecolumns?sqlt=' + tableid,
-			      data: {},
-			      success: function(r){ 
-			      		$('.ajax-list').empty();
-			      		$('.addcolstable-field').remove();
-
-			      		_.each(r.data, function(rr){
-			      			var appendcontrol = "<div class='list-group-item'><input type='checkbox' id='cb_" + rr.column_id + "' class='csel-cb' name2='" + rr.name + "' id2='" + rr.column_id + "'>";
-			      			appendcontrol = appendcontrol + " <a class='csel-a' href='#' name2='" + rr.name + "' id2='" + rr.column_id + "'>" + rr.name + "</a></div>";
-
-			      			$('.ajax-list').append(appendcontrol);
-			      		});
-			      },
-			      dataType: 'json'
-			});  
+				}
+			  }
 		});
 
+	}
 
-		$("div").on("click", ".csel-cb", function(evt) {
+	createImportMap = function(){
 
-			if ($(this).prop('checked')){
-				var tablerow = "<tr class='addcolstable-field' name2='" + $(this).attr("name2") + "' id='tr_" + $(this).attr("id2") + "'><td>" +  $(this).attr("name2") + "</td><td><input type='text' id='tb_" + $(this).attr("id2") + "'></td></tr>";
-				$('.addcolstable').append(tablerow);
-			}
-			else {
-				$('.addcolsdiv').find("#tr_" + $(this).attr("id2")).remove();
-			}
+		var label =  $('#newnodeslabel').val();
 
-		  	evt.stopPropagation();
-	 
-		});
+		var fields = [];
+		var sqlfield = "";
+		var neofield = "";
+		var converttoint = "";
+		var convertchecked;
 
+		socket.post('/DataIntegration/initiateImportmap', {label:label}, function(newmap){
 
-		$("div").on("click", ".csel-a", function(evt) {
+			$('#fieldmapid').val(newmap.id);
 
-			var id = $(this).attr("id2");
+			$('.addcolstable > tbody > tr').each(function(a,b){
+				if (a>0){
+					sqlfield = $(b.cells[0]).attr('name');
 
-			if ($("#cb_" + id).prop('checked')){
-				$("#cb_" + id).prop('checked',false);
-				$('.addcolsdiv').find("#tr_" + id).remove();
-			}
-			else {
-				$("#cb_" + id).prop("checked",true);
-				var tablerow = "<tr class='addcolstable-field' name2='" + $(this).attr("name2") + "' id='tr_" + id + "'><td>" +  $(this).attr("name2") + "</td><td><input type='text' id='tb_" + $(this).attr("id2") + "'></td></tr>";
-				$('.addcolstable').append(tablerow);
-			}
+					convertchecked = $('#' + $($(b.cells[2]).html()).attr('id')).is(':checked');
 
-		  	evt.stopPropagation();
-	 
-		});
+					if(convertchecked) 
+						converttoint = "1"
+					else
+						converttoint = "0"
 
-
-
-		replaceAll = function (find, replace, str) {
-
-		  return str.replace(new RegExp(find, 'g'), replace);
-
-		}
-
-
-		createSQL = function(cb){
-
-			
-			var tablename = $('#newnodessourcetable').val();
-			var sql = "select ";
-
-			$('.addcolstable .addcolstable-field').each(function(index, element){
-				sql = sql  + $(element).attr("name2").replace(/ *\([^)]*\) */g, "") + "," ; /* remove parantheses and everything inbetween */
+					neofield = $('#tb_' + a).val();
+					fields.push({sqlfield: sqlfield, neofield: neofield, converttoint: converttoint});
+				}
 			});
 
-			sql = sql.substring(0,sql.length-1) + " from " + tablename;
-
-			console.log(sql);
-
-			cb(sql);
-		}
-
-
-		createPowershellScript = function(){
-
-			createSQL(function(sql){
-
-				var tablename = $('#newnodessourcetable').val() + '.csv';
-				var psfilename = $('#newnodessourcetable').val() + '.ps1';
-
-				var db = settings.sqldb;
-				var instance = settings.sqlinstance;
-				var delimiter = settings.csvsep;
-				var full_csv_filepath = settings.csvfolder + '\\' + tablename;
-				var full_ps_filepath = settings.psfolder + '\\' + psfilename;
-
-				var ps = 'write-host -ForegroundColor Green "Creating File %1" \r\n ' 
-				+ ' invoke-sqlcmd -query "%2" -database "%3" -serverinstance "%4" | export-csv -delimiter "%5" -path %6 -NoTypeInformation \r\n'
-				+ ' (gc %6) | % {$_ -replace \'"\', ""} | out-file %6 -Fo -En ascii \r\n'
-
-				ps = replaceAll('%1', tablename, ps);
-				ps = replaceAll('%2', sql, ps);
-				ps = replaceAll('%3', db, ps);
-				ps = replaceAll('%4', instance, ps);
-				ps = replaceAll('%5', delimiter, ps);
-				ps = replaceAll('%6', full_csv_filepath, ps);
-
-				$('.status').append('<div class="spinner"><img src="/images/ajax-loader.gif"</div>');
-
-				$.ajax({
-			      url: 'DataIntegration/savepowershellfile',
-			      data: {
-			      		psfiledata:ps, 
-			      		psfilename: full_ps_filepath
-			      },
-			      statusCode: {
-				    200: function() {
-				    	$('.status').append('<div>created powershell file ' + full_ps_filepath + '</div>');
-				    	$('.status').append('<div>initated execution of powershell file ' + full_ps_filepath + '</div>');
-					      $.ajax({
-						      url: 'DataIntegration/runpowershellfile',
-						      data: {psfilename: full_ps_filepath},
-						      statusCode: {
-							    200: function() {
-							    	$('.status').append('<div>executed powershell file ' + full_ps_filepath + '</div>');
-							    	$('.spinner').remove();
-							    }
-							  },
-						      dataType: 'json'
-							});
-
-				    }
-				  },
-
-			      dataType: 'json'
-				});
-
+			socket.post('/DataIntegration/addFieldsToImportmap', {fields:fields, mapid: newmap.id}, function(res){
 
 			});	
 
+		});
 
+	}
+
+
+	/* Click events ------------------------------------------------------------------------------------------------------------ */
+
+
+	/* We clicked on one of the tables in the initial list - add the columns of the table  */
+	$('.tablelistitem').click(function(){
+
+		var tableid = $(this).attr("id");
+		var tablename = $(this).attr("name");
+
+		$('#newnodessourcetable').val(tablename);
+
+	    $.ajax({
+		      url: '/DataIntegration/tablecolumns?sqlt=' + tableid,
+		      data: {},
+		      success: function(r){ 
+		      		$('.ajax-list').empty();
+		      		$('.addcolstable-field').remove();
+		      		_.each(r.data, function(rr){
+		      			var ac = columnsrow_f(rr.column_id, rr.namefull, rr.nameshort);
+		      			$('.ajax-list').append(ac);
+		      		});
+		      },
+		      dataType: 'json'
+		});  
+	
+	});
+
+	/* We clicked one of the checkboxes in the list of available columns - add it to the active columns list */
+	$("div").on("click", ".csel-cb", function(evt) {
+
+		var id2 = $(this).attr("id2");
+		var name = $(this).attr("name");
+		var name2 = $(this).attr("name2");
+		
+		if ($(this).prop('checked')){
+			$('.addcolstable').append(tablerow_f(name, name2, id2));
+		}
+		else {
+			$('.addcolsdiv').find("#tr_" + $(this).attr("id2")).remove();
 		}
 
-		$('.create-node-but').click(function(){
-			createPowershellScript();
-		});
-
-		$('.create-rel-but').click(function(){
-			alert('rel');
-		});
-
-		$('.create-prop-but').click(function(){
-			alert('prop');
-		});
-
-
-
+	  	evt.stopPropagation();	 
+	
 	});
+
+	/* We clicked one of the HREFS in the list of available columns - add it to the active columns list  */
+	$("div").on("click", ".csel-a", function(evt) {
+
+		var id2 = $(this).attr("id2");
+		var name = $(this).attr("name");
+		var name2 = $(this).attr("name2");
+
+		if ($("#cb_" + id2).prop('checked')){
+			$("#cb_" + id2).prop('checked',false);
+			$('.addcolsdiv').find("#tr_" + id2).remove();
+		}
+		else {
+			$("#cb_" + id2).prop("checked",true);
+			$('.addcolstable').append(tablerow_f(name, name2, id2));
+		}
+
+	  	evt.stopPropagation();
+	
+	});
+
+	$('.create-node-but').click(function(){
+		createPowershellScript();
+	});
+
+	$('.process-file-but').click(function(){
+		processcsvfile();
+	});
+
+	$('.create-map-but').click(function(){
+		createImportMap();
+	});
+
+	$('.create-rel-but').click(function(){
+		alert('rel');
+	});
+
+	$('.create-prop-but').click(function(){
+		alert('prop');
+	});
+
 
 });

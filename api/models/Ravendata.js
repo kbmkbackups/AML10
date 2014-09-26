@@ -1,6 +1,8 @@
 
 module.exports = {
-
+  
+  /*
+  
   schema: true,
   connection: 'ravendb',
 
@@ -10,5 +12,7 @@ module.exports = {
   	userpass: 'string'	
   	
   }
+
+  */
 
 };

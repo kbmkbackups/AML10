@@ -1,7 +1,7 @@
 
 module.exports = {
 
-  connection: 'ravendb',
+  connection: 'mongolocal',
   
   attributes: {
   	name: 'string',

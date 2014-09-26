@@ -29,9 +29,9 @@ module.exports = {
 	    CypherQuery.find(function(err, queries) {
 	      if (err) return next(err);
 	      CypherQuery.watch(req.socket);
-	      CypherQuery.watch(req.socket, queries);
 	      res.send(200);
 	    });
+
   	},
 
 

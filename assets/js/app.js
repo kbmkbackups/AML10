@@ -10,13 +10,6 @@
 
   window.socket = socket;
 
-
-  function log () {
-    if (typeof console !== 'undefined') {
-      console.log.apply(console, arguments);
-    }
-  }
-
 })(window.io);
 
 
@@ -60,7 +53,7 @@ function messageReceivedFromServer(message) {
       var name = message.data.name;
       var cypherquery = message.data.cypherquery;
 
-      var oc = "createEditorPanel('" + cypherquery + "')";
+      var oc = 'createEditorPanel("' + cypherquery + '")';
 
       var newli = "<li onclick='" + oc + "'><a href='#'>" + name + "</a></li>";
 
@@ -83,7 +76,6 @@ function messageReceivedFromServer(message) {
 
           $('.status').append('<br>Powershell execution completed');
       }
-
 
   }
       

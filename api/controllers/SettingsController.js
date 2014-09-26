@@ -41,7 +41,6 @@ module.exports = {
 
 		Settings.create(settings, function(err, cns) {	
   			cns.save(function(err, cn) {
-  				console.log(err);
         		if (err) return next(err);
         		res.redirect('/Settings/index');
 

@@ -30,24 +30,23 @@ var cssFilesToInject = [
 // Client-side javascript files to inject in order
 // (uses Grunt-style wildcard/glob/splat expressions)
 var jsFilesToInject = [
-    'js/socket.io.js',
-    'js/sails.io.js',
+    'lib/socket.io.js',
+    'lib/sails.io.js',
     'js/app.js',
-    'js/vendor.js',
-    'js/neo.js',
-	'js/jquery-2.1.1.min.js',
-    'js/jquery.widget.min.js',  
-    'js/jquery-ui.min.js',
-    'js/jquery-functions.js',
-    'js/ui-utils.js',
+    'lib/vendor.js',
+    'lib/neo.js',
+	'lib/jquery-2.1.1.min.js',
+    'lib/jquery.widget.min.js',  
+    'lib/jquery-ui.min.js',
+    'lib/jquery-functions.js',
     'js/ui-panels.js',
-    'js/bootstrap.js',      
-    'js/ejs_production.js',
-    'js/codemirror.js',
-    'js/codemirror-cypher.js',
-    'js/alchemy.js',
-    'js/alchemyConfig.js', 
-    'js/metro.min.js'
+    'lib/bootstrap.js',      
+    'lib/ejs_production.js',
+    'lib/codemirror.js',
+    'lib/codemirror-cypher.js',
+    'lib/alchemy.js',
+    'lib/alchemyConfig.js', 
+    'lib/metro.min.js'
 ];
 
 

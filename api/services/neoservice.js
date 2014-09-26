@@ -1,5 +1,4 @@
 var rest = require('restler');
-var server = 'http://localhost:7474/';
 
 var rel_url = 'db/data/relationship/types';
 var pk_url = 'db/data/propertykeys';
@@ -15,7 +14,7 @@ fixresult = function(data, cb){
 	cb(keys);
 }
 
-restler_get = function(url, cb) {
+restler_get = function(server, url, cb) {
 
 	rest.get(server + url).on('complete', function(result) {
 	  if (result instanceof Error) {
@@ -31,23 +30,23 @@ restler_get = function(url, cb) {
 }
 
 
-exports.neo_meta_relations = function(cb) {
+exports.neo_meta_relations = function(server, cb) {
 
-	restler_get(rel_url, cb);
-
-}
-
-
-exports.neo_meta_labels = function(cb) {
-
-	restler_get(label_url, cb);
+	restler_get(server, rel_url, cb);
 
 }
 
 
-exports.neo_meta_propertykeys = function(cb) {
+exports.neo_meta_labels = function(server, cb) {
 
-	restler_get(pk_url, cb);
+	restler_get(server, label_url, cb);
+
+}
+
+
+exports.neo_meta_propertykeys = function(server, cb) {
+
+	restler_get(server, pk_url, cb);
 	
 
 }

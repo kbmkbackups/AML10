@@ -1,19 +1,37 @@
 var sql = require('mssql'); 
 
-var config = {
-    user: 'sa',
-    password: 'sa',
-    server: 'localhost\\ENTERPRISE', // You can use 'localhost\\instance' to connect to named instance
-    database: 'SaxoAML',
+exports.SQL_GetColumnsOfTable = function(tableid, cb){
 
-    options: {
-        encrypt: false // Use this if you're on Windows Azure
-    }
+    var sql_c = "select c.column_id, c.name + ' (' + t.name + ')' namefull, c.name nameshort"; 
+        sql_c = sql_c + " from sys.columns c";
+        sql_c = sql_c + " join sys.types t on c.user_type_id = t.user_type_id";
+        sql_c = sql_c + " where object_id = " + tableid 
+
+    cb(sql_c);
+}
+
+exports.SQL_GetTablesOfDatabase = function(cb){
+    var sql_c = 'select t.object_id, s.name + \'.\' + t.name name from sys.tables t join sys.schemas s on s.schema_id = t.schema_id order by s.name';
+    cb(sql_c);  
 }
 
 
+exports.getMSSQLRecordset = function(query, settings, cb){
 
-exports.getMSSQLRecordset = function(query, cb){
+    console.log(settings);
+
+    var config = {
+        
+        user: settings.sqlaccount,
+        password: settings.sqlpass,
+        server: settings.sqlinstance,
+        database: settings.sqldb,
+
+        options: {
+            encrypt: false
+        }
+    }
+
 
     var connection = new sql.Connection(config, function(err) {
 
@@ -25,23 +43,4 @@ exports.getMSSQLRecordset = function(query, cb){
 
     });
     
-
-/*
-    sql.connect(config, function(err) {
-    // ... error checks
-
-    // Query
-
-    var request = new sql.Request();
-    request.query('SELECT [AccountTypeID] ,[AccountTypeDesc] FROM [SaxoAML].[baseenum].[AccountTypes]', function(err, recordset) {
-        // ... error checks
-
-        cb(err);
-    });
-
-
-
-    });
-*/
-
 }
