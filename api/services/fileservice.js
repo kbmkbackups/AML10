@@ -52,12 +52,10 @@ fgets = function(handle) {
 createCreateline = function(map){
 	
 	var label = map[0].label;
-
 	var crstring = 'CREATE ( n:' + label + ' {';
 	var c=1;
 
 	_.each(map[0].fieldlist, function(r){
-		console.log(r);
 		if (r.converttoint === "1"){
 			crstring += r.neofield + ": toInt(%" + c + "), ";	
 		} else {
@@ -112,14 +110,12 @@ exports.processcsv = function(csvfile, SETTINGS, map, cb){
 
 	   var c=1;
 	  _.each(linefields, function(){
-	  		cr = cr.replace('%' + c, "\"" + linefields[c-1] + "\"");
+	  		cr = cr.replace('%' + c, '\"' + linefields[c-1] + '\"') + '\r\n';
 	  		c++;
 
 	  });
 
-	  console.log(cr);
 	  fs.writeSync(w, cr, null, 'utf8');
-
 	} 
 	
 	fclose(r)

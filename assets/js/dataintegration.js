@@ -20,7 +20,7 @@ $(document).ready(function(){
 
 
 	tablerow_f = function(name, name2, id2){
-		var tablerow = "<tr class='addcolstable-field' name='" + name + "' name2='" + name2 + "' id='tr_" + id2 + "'><td name='" + name + "' name2='" + name2 + "'>" 
+		var tablerow = "<tr class='addcolstable-field' name='" + name + "' name2='" + name2 + "' id='tr_" + id2 + "'><td id2='" + id2 + "' name='" + name + "' name2='" + name2 + "'>" 
 		                    + name2 + "</td><td><input type='text' id='tb_" + id2 + "'></td><td><input type='checkbox' id='convcb_" + name + "'></td></tr>";
 		return tablerow;
 	}
@@ -45,6 +45,7 @@ $(document).ready(function(){
 		cb(sql);
 
 	}
+
 
 
 	createPowershellScript = function(){
@@ -114,7 +115,8 @@ $(document).ready(function(){
 
 			$('.addcolstable > tbody > tr').each(function(a,b){
 				if (a>0){
-					sqlfield = $(b.cells[0]).attr('name');
+					sqlfield = $(b.cells[0]).attr('name'); //name attribute of the first ([0]) <td>
+					id2 = $(b.cells[0]).attr('id2'); //id2 attribute of the first ([0]) <td>
 
 					convertchecked = $('#' + $($(b.cells[2]).html()).attr('id')).is(':checked');
 
@@ -123,7 +125,7 @@ $(document).ready(function(){
 					else
 						converttoint = "0"
 
-					neofield = $('#tb_' + a).val();
+					neofield = $('#tb_' + id2).val();
 					fields.push({sqlfield: sqlfield, neofield: neofield, converttoint: converttoint});
 				}
 			});

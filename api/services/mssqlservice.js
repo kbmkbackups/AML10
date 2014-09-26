@@ -18,8 +18,6 @@ exports.SQL_GetTablesOfDatabase = function(cb){
 
 exports.getMSSQLRecordset = function(query, settings, cb){
 
-    console.log(settings);
-
     var config = {
         
         user: settings.sqlaccount,
