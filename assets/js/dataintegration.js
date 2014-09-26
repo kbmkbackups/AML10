@@ -109,32 +109,27 @@ $(document).ready(function(){
 		var converttoint = "";
 		var convertchecked;
 
-		socket.post('/DataIntegration/initiateImportmap', {label:label}, function(newmap){
+		$('.addcolstable > tbody > tr').each(function(a,b){
+			if (a>0){
+				
+				sqlfield = $(b.cells[0]).attr('name'); //name attribute of the first ([0]) <td>
+				id2 = $(b.cells[0]).attr('id2'); //id2 attribute of the first ([0]) <td>
 
-			$('#fieldmapid').val(newmap.id);
+				convertchecked = $('#' + $($(b.cells[2]).html()).attr('id')).is(':checked');
 
-			$('.addcolstable > tbody > tr').each(function(a,b){
-				if (a>0){
-					sqlfield = $(b.cells[0]).attr('name'); //name attribute of the first ([0]) <td>
-					id2 = $(b.cells[0]).attr('id2'); //id2 attribute of the first ([0]) <td>
+				if(convertchecked) 
+					converttoint = "1"
+				else
+					converttoint = "0"
 
-					convertchecked = $('#' + $($(b.cells[2]).html()).attr('id')).is(':checked');
-
-					if(convertchecked) 
-						converttoint = "1"
-					else
-						converttoint = "0"
-
-					neofield = $('#tb_' + id2).val();
-					fields.push({sqlfield: sqlfield, neofield: neofield, converttoint: converttoint});
-				}
-			});
-
-			socket.post('/DataIntegration/addFieldsToImportmap', {fields:fields, mapid: newmap.id}, function(res){
-
-			});	
-
+				neofield = $('#tb_' + id2).val();
+				fields.push({sqlfield: sqlfield, neofield: neofield, converttoint: converttoint});
+			}
 		});
+
+		socket.post('/DataIntegration/create_import_map', {label:label, fields:fields}, function(res){
+			$('#fieldmapid').val(res.id);
+		});	
 
 	}
 

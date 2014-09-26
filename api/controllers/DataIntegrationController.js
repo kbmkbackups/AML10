@@ -40,11 +40,11 @@ module.exports = {
 
         settingsservice.getSettings(function(settings){
           powershellservice.create_powershell_export_script(settings, tablename, psfilename, sql, function(scriptcode, savefilefullpath){
-              fileservice.writefile(savefilefullpath, scriptcode, function(){
-                  powershellservice.runpowershell(savefilefullpath,function(){
-                    res.send(200);
-                  });
+            fileservice.writefile(savefilefullpath, scriptcode, function(){
+              powershellservice.runpowershell(savefilefullpath,function(){
+                res.send(200);
               });
+            });
           });
         });
 
@@ -57,18 +57,21 @@ module.exports = {
       mapid = req.param('mapid');
 
       Importmap.find(mapid).populate('fieldlist').exec(function(err,map){
-          settingsservice.getSettings(function(settings){
-              fileservice.processcsv(savefile, settings, map, function(){
-                res.send(200);
-              });
+        settingsservice.getSettings(function(settings){
+          fileservice.processcsv(savefile, settings, map, function(){
+            res.send(200);
           });
+        });
       });
 
     },
 
-    initiateImportmap : function(req, res, next){
+
+    create_import_map: function(req,res,next){
 
         var label = req.param('label');
+        var fields = req.param('fields'); 
+        var newfieldrecord = {};
 
         var mapobj = {
             label: label,
@@ -76,37 +79,27 @@ module.exports = {
         }
 
         Importmap.create(mapobj, function(err, newmap){
-            res.json(newmap);
-        });
 
-    },
+            _.each(fields,function(field){
 
+                newfieldrecord = {
+                      sqlfield: field.sqlfield,
+                      neofield: field.neofield,
+                      converttoint: field.converttoint,
+                      map: newmap.id
+                }
 
+                Importfield.create(newfieldrecord, function(err, nf) {  
+                  nf.save(function(err, cn) {
+                      if (err) return next(err);
+                  });
+                });
 
-    addFieldsToImportmap: function(req,res,next){
-
-        var fields = req.param('fields'); 
-        var mapid = req.param('mapid');
-        var newfieldrecord = {};
-
-        _.each(fields,function(field){
-
-            newfieldrecord = {
-                  sqlfield: field.sqlfield,
-                  neofield: field.neofield,
-                  converttoint: field.converttoint,
-                  map: mapid
-            }
-
-            Importfield.create(newfieldrecord, function(err, nf) {  
-              nf.save(function(err, cn) {
-                  if (err) return next(err);
-              });
             });
 
+            res.send(200,{id:newmap.id});
+
         });
-
-
 
     },
 

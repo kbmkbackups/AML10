@@ -1,18 +1,6 @@
 <div class="go-left"><h2>Data Integration</h2></div>
 
-<div class="bs-example">
-    <div class="panel-group" id="accordion">
 
-        <div class="panel panel-default">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseOne">neo4j metadata</a>
-                </h4>
-            </div>
-
-            <div id="collapseOne" class="panel-collapse collapse">
-                <div class="panel-body">
 
 						<div class="container-non-responsive">
 							<div class="row">
@@ -49,41 +37,25 @@
 							</div>
 						</div>
 
-                </div>
-            </div>
 
-        </div>
-
-
-
-        <div class="panel panel-default">
-
-            <div class="panel-heading">
-                <h4 class="panel-title">
-                    <a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo">mssql metadata</a>
-                </h4>
-            </div>
-            <div class="container-fluid">
-
-            <div id="collapseTwo" class="panel-collapse collapse in">
-                <div class="panel-body">
 
                 	<div class='status'></div>
                 	
                 	<div class="row">
 					    <div class="col-xs-2">
-					    	<button type="button" class="primary metanavbut create-node-but" data-toggle="dropdown">Create Nodes</button>
-					    	<button type="button" class="primary metanavbut process-file-but" data-toggle="dropdown">Run Import</button>
+					    	<button type="button" class="primary metanavbut create-node-but" data-toggle="dropdown">Create CSV File</button>
+					    	<button type="button" class="primary metanavbut process-file-but" data-toggle="dropdown">Create Cypher File</button>
 					    </div>
 					   	<div class="col-xs-2">
-					    	<button type="button" class="primary metanavbut create-rel-but" data-toggle="dropdown">Create Relationships</button>
+					    	<button type="button" class="success metanavbut create-map-but" data-toggle="dropdown">Create Field Map</button>
 					    </div>
 					    <div class="col-xs-2">
+					        <button type="button" class="primary metanavbut create-rel-but" data-toggle="dropdown">Create Relationships</button>
 					    	<button type="button" class="primary metanavbut create-prop-but" data-toggle="dropdown">Create Properties</button>
-					    	<button type="button" class="success metanavbut create-map-but" data-toggle="dropdown">Create Map</button>
-					    	<input type="text" id="fieldmapid" disabled>
 					    </div>
-
+						FieldMapId: <input type="text" id="fieldmapid" disabled><br>
+						Table: <input type="text" id="newnodessourcetable" disabled><br>
+						Label: <input type="text" id="newnodeslabel"><br>
 					</div>
 
                     <div class="row">
@@ -111,8 +83,7 @@
 							</div>
 
 							<div class="addcolsdiv">
-								Label: <input type="text" id="newnodeslabel"><br>
-								Table: <input type="text" id="newnodessourcetable"><br>
+
 								
 								<table class="addcolstable table" border=1><tr><td>SQL Field</td><td>Node Property</td><td>Convert</td></tr>
 
@@ -122,17 +93,6 @@
 						</div>
 
 					</div>
-
-                </div> <!-- Panel Body -->
-            </div>
-
-            </div>
-
-
-        </div>  <!-- Panel -->
-
-    </div>
-</div>
 
 
 <% script('js/dataintegration.js') -%>
