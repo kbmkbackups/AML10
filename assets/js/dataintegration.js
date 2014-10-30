@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+
 	socket.get('/NeoProxy/getneometa', { type: 'relationships' }, function(r){
 		_.each(r, function(rr){
   			$('.relationship-t').append("<a class='list-group-item'>" + rr.key + "</a>");	
@@ -20,14 +21,17 @@ $(document).ready(function(){
 
 
 	tablerow_f = function(name, name2, id2){
-		var tablerow = "<tr class='addcolstable-field' name='" + name + "' name2='" + name2 + "' id='tr_" + id2 + "'><td id2='" + id2 + "' name='" + name + "' name2='" + name2 + "'>" 
-		                    + name2 + "</td><td><input type='text' id='tb_" + id2 + "'></td><td><input type='checkbox' id='convcb_" + name + "'></td></tr>";
+		var tablerow =  	"<tr class='addcolstable-field' name='" + name + "' name2='" + name2 + "' id='tr_" + id2 + "'>"
+					  	  + "<td id2='" + id2 + "' name='" + name + "' name2='" + name2 + "'>" + name2 + "</td>"
+					  	  + "<td><input type='text' id='tb_" + id2 + "'></td><td><input type='checkbox' id='convcb_" + name + "'></td></tr>";
 		return tablerow;
 	}
 
 	columnsrow_f = function(column_id, namefull, nameshort){
-			var crdiv = "<div class='list-group-item'><input class='csel-cb' type='checkbox' id='cb_" + column_id + "'  id2='" + column_id + "' name='" + nameshort + "' name2='" + namefull + "'>"
-                          + "&nbsp;<a class='csel-a' href='#' name='" + nameshort + "' + name2='" + namefull + "' id2='" + column_id + "'>" + namefull	+ "</a></div>";	
+		var crdiv =         "<div class='list-group-item'>"
+						  + "  <input class='csel-cb' type='checkbox' id='cb_" + column_id + "'  id2='" + column_id + "' name='" + nameshort + "' name2='" + namefull + "'>"
+                          + "  &nbsp;<a class='csel-a' href='#' name='" + nameshort + "' + name2='" + namefull + "' id2='" + column_id + "'>" + namefull	+ "</a>"
+                          + "</div>";	
         return crdiv;
 	}
 
@@ -48,7 +52,7 @@ $(document).ready(function(){
 
 
 
-	createPowershellScript = function(){
+	createPowershellScriptFile = function(){
 
 		createSQL(function(sql){
 
@@ -66,7 +70,7 @@ $(document).ready(function(){
 		      data: ps_engine_obj,
 		      statusCode: {
 			    200: function(e,d) {
-			    	console.log('...........................');
+			    	console.log('File created');
 			    }
 			  },
 
@@ -78,7 +82,7 @@ $(document).ready(function(){
 
 	}
 
-	processcsvfile = function(){
+	createCypherFromCSV = function(){
 
 		var pfile = $('#newnodessourcetable').val() + '.csv';
 		var mapid = $('#fieldmapid').val();
@@ -99,7 +103,7 @@ $(document).ready(function(){
 
 	}
 
-	createImportMap = function(){
+	generateImportMap = function(){
 
 		var label =  $('#newnodeslabel').val();
 
@@ -112,8 +116,8 @@ $(document).ready(function(){
 		$('.addcolstable > tbody > tr').each(function(a,b){
 			if (a>0){
 				
-				sqlfield = $(b.cells[0]).attr('name'); //name attribute of the first ([0]) <td>
-				id2 = $(b.cells[0]).attr('id2'); //id2 attribute of the first ([0]) <td>
+				sqlfield = $(b.cells[0]).attr('name'); 
+				id2 = $(b.cells[0]).attr('id2'); 
 
 				convertchecked = $('#' + $($(b.cells[2]).html()).attr('id')).is(':checked');
 
@@ -200,15 +204,15 @@ $(document).ready(function(){
 	});
 
 	$('.create-node-but').click(function(){
-		createPowershellScript();
+		createPowershellScriptFile();
 	});
 
 	$('.process-file-but').click(function(){
-		processcsvfile();
+		createCypherFromCSV();
 	});
 
 	$('.create-map-but').click(function(){
-		createImportMap();
+		generateImportMap();
 	});
 
 	$('.create-rel-but').click(function(){

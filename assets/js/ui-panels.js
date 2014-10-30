@@ -209,7 +209,8 @@ $(document).ready(function(){
 			config.alpha = 0.8;
 			config.edgeTypes = "caption";
 
-			alchemy.begin(config)
+			alchemy.begin(config);
+			
 			var neo = new Neo(neoUrl);
 
 			neo.executeQuery(querycode,{},function(err,res) {

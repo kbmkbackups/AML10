@@ -58,7 +58,7 @@ module.exports = {
 
       Importmap.find(mapid).populate('fieldlist').exec(function(err,map){
         settingsservice.getSettings(function(settings){
-          fileservice.processcsv(savefile, settings, map, function(){
+          neoservice.csvtocypher(savefile, settings, map, function(){
             res.send(200);
           });
         });
